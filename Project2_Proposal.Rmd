@@ -1,6 +1,6 @@
 ---
 title: "Project-2 Proposal"
-author: "NityaAttili"
+author: "Data Nexus"
 date: "2024-11-13"
 output: pdf_document
 ---
@@ -28,12 +28,21 @@ The dataset is sourced from the LAPD, covering reported crime incidents in Los A
 -   **Process**:
 
 ```{r}
-# Load the LAPD crime dataset from the source
-#crime_data <- readr::read_csv('https://data.lacity.org/path_to_LAPD_crime_data.csv')
+# Load necessary package
+library(dplyr)
+
+# Get a list of all CSV files in the directory
+csv_files <- list.files(path = "Data/", pattern = "*.csv", full.names = TRUE)
+
+# Read and combine all CSV files into one data frame
+merged_data <- do.call(rbind, lapply(csv_files, read.csv))
+
+# View the merged data
+head(merged_data)
 
 # Get the dimensions and column names of the dataset
-#dim(crime_data)
-#colnames(crime_data)
+dim(crime_data)
+colnames(crime_data)
 
 
 ```
