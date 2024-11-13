@@ -1,0 +1,125 @@
+---
+title: "Project-2 Proposal"
+author: "NityaAttili"
+date: "2024-11-13"
+output: pdf_document
+---
+
+## Project Proposal: Public Safety Awareness Campaign Based on Crime Data
+
+### Objective:
+
+To develop an impactful public safety awareness campaign by analyzing crime data in Los Angeles from 2020 to the present. This campaign aims to educate residents on prevalent crime types, identify high-risk areas, and promote proactive safety measures to enhance community well-being and reduce incidents.
+
+### Description:
+
+Using crime data provided by the LAPD, this project will analyze trends and patterns, focusing on common crime types and their geographical distribution. The insights will help shape an awareness campaign tailored to community needs, encouraging residents to adopt practical safety measures and fostering a collaborative relationship between the LAPD and the community.
+
+### Data Source
+
+The dataset is sourced from the LAPD, covering reported crime incidents in Los Angeles from 2020 to the present. The LAPD crime data is available online and includes detailed, anonymized records of various crime types. Due to the transition to a new NIBRS-compliant Records Management System in March 2024, updates are provided bi-weekly.
+
+**Source:** LAPD Crime Dataset - Los Angeles Open Data Portal.
+
+#### 1. **Data Analysis for Awareness**
+
+-   **Objectives**: Identify and understand the most common crime types and the neighborhoods most impacted. Analyze demographic factors to tailor the campaign for specific areas.
+
+-   **Process**:
+
+```{r}
+# Load the LAPD crime dataset from the source
+#crime_data <- readr::read_csv('https://data.lacity.org/path_to_LAPD_crime_data.csv')
+
+# Get the dimensions and column names of the dataset
+#dim(crime_data)
+#colnames(crime_data)
+
+
+```
+
+**Insights to Gather**:
+
+-   Crime types with the highest incidence rates.
+
+-   Patterns of crime over time and by location.
+
+-   High-risk areas and times for specific crimes.
+
+#### 2. **Campaign Development**
+
+-   **Materials Creation**: Design accessible and informative materials such as flyers, social media graphics, and posters focusing on common crime prevention strategies.
+
+-   **Community Collaboration**: Partner with community leaders and local organizations to enhance reach and credibility. Materials will include crime prevention tips tailored to prevalent crime types and specific demographics.
+
+-   **Workshops**: Organize in-person and virtual sessions covering safety techniques and best practices, creating a platform for direct community engagement.
+
+#### 3. **Engagement Strategies**
+
+-   **Social Media**: Develop dedicated channels for sharing real-time safety tips, updates on recent incidents, and interactive content like quizzes and polls.
+
+-   **Community Feedback Mechanisms**: Establish feedback loops, such as online forms and QR codes on physical materials, allowing residents to report concerns, provide suggestions, and informally share safety-related experiences.
+
+#### 4. **Feedback and Continuous Improvement**
+
+-   **Data-Driven Adjustments**: Regularly analyze feedback and updated crime data to refine the campaign materials and engagement approach. This iterative method will ensure that the campaign remains relevant and impactful.
+
+-   **Ongoing Reporting**: Provide periodic reports summarizing campaign outcomes, community feedback, and any observable reductions in specific crime types.
+
+### Research Questions
+
+**Question 1: What are the most common types of crimes and high-risk areas in Los Angeles?**
+
+-   **Variables**: Crime type, location, date, and time.
+
+-   **Plan**:
+
+    -   Clean and preprocess crime data, focusing on crime type, time, and location.
+
+    -   Perform trend analysis to reveal patterns over time and across neighborhoods.
+
+-   **Visualizations**:
+
+    -   A heatmap for spatial distribution of crime.
+
+    -   A time series chart for crime types by month or year.
+
+**Question 2: How can community engagement influence safety awareness and crime reduction?**
+
+-   **Variables**: Crime incidence pre- and post-campaign, community engagement metrics.
+
+-   **Plan**:
+
+    -   Survey community members on campaign awareness and perceived safety improvements.
+
+    -   Compare crime rates in high-risk areas before and after campaign rollout.
+
+-   **Visualizations**:
+
+    -   Bar chart comparing reported crimes in key areas pre- and post-campaign.
+
+    -   Survey response visualizations to show campaign reach and impact.
+
+### Analysis Plan
+
+| Task | Status | Assignee | Due Date | Priority | Summary |
+|------------|------------|------------|------------|------------|-------------|
+| **Data Collection and Cleaning** | Not Started |  | Week 1 | High | Collect and clean LAPD data for analysis. |
+| **Crime Trends Analysis** | Not Started |  | Week 1 | High | Identify common crime types and locations. |
+| **Campaign Material Design** | Not Started |  | Week 2 | High | Develop digital and print materials. |
+| **Community Workshop Planning** | Not Started |  | Week 3 | Medium | Plan virtual and in-person sessions. |
+| **Feedback Mechanism Setup** | Not Started |  | Week 3 | Medium | Create channels for collecting feedback. |
+| **Campaign Rollout** | Not Started |  | Week 4 | High | Launch awareness campaign in target areas. |
+| **Impact Evaluation** | Not Started |  | Week 5 | High | Track crime rates and feedback post-launch. |
+
+### Expected Outcomes
+
+-   **Increased Awareness**: Community members will gain knowledge of prevalent crimes and learn safety practices.
+
+-   **Crime Reduction**: The campaign may contribute to a decrease in frequently reported crimes in high-risk areas.
+
+-   **Improved Community Relations**: By actively engaging residents, the campaign fosters trust and cooperation with the LAPD.
+
+-   **Actionable Feedback**: Feedback collected from the community will support ongoing improvements and adjustments to the campaign.
+
+This proposal presents a targeted safety awareness campaign that utilizes crime data to empower residents and promote safer neighborhoods. By fostering collaboration between the community and law enforcement, we aim to strengthen relationships and create a more informed and secure environment for all.
