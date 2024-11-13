@@ -35,15 +35,14 @@ library(dplyr)
 csv_files <- list.files(path = "Data/", pattern = "*.csv", full.names = TRUE)
 
 # Read and combine all CSV files into one data frame
-merged_data <- do.call(rbind, lapply(csv_files, read.csv))
+crime_data <- do.call(rbind, lapply(csv_files, read.csv))
 
 # View the merged data
-head(merged_data)
+head(crime_data)
 
 # Get the dimensions and column names of the dataset
 dim(crime_data)
 colnames(crime_data)
-
 
 ```
 
