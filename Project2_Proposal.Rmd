@@ -21,6 +21,50 @@ The dataset is sourced from the LAPD, covering reported crime incidents in Los A
 
 **Source:** LAPD Crime Dataset - Los Angeles Open Data Portal.
 
+### Data Dimensions
+
+Each row is a crime incident
+
+Rows --> 984K
+Columns --> 28
+
+Here is the provided information converted into a markup table:
+
+| Column Name     | Description                                                                                                                                                                                                                      | API Field Name | Data Type           |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|----------------|---------------------|
+| DR_NO           | Division of Records Number: Official file number made up of a 2 digit year, area ID, and 5 digits                                                                                      | dr_no          | Text                |
+| Date Rptd       | MM/DD/YYYY                                                                                                                                                                              | date_rptd      | Floating Timestamp  |
+| DATE OCC        | MM/DD/YYYY                                                                                                                                                                              | date_occ       | Floating Timestamp  |
+| TIME OCC        | In 24 hour military time.                                                                                                                                                               | time_occ       | Text                |
+| AREA            | The LAPD has 21 Community Police Stations referred to as Geographic Areas within the department. These Geographic Areas are sequentially numbered from 1-21.                             | area           | Text                |
+| AREA NAME       | The 21 Geographic Areas or Patrol Divisions are also given a name designation that references a landmark or the surrounding community that it is responsible for.                        | area_name      | Text                |
+| Rpt Dist No     | A four-digit code that represents a sub-area within a Geographic Area. All crime records reference the "RD" that it occurred in for statistical comparisons.                            | rpt_dist_no    | Text                |
+| Part 1-2        |                                                                                                                                                                                          | part_1_2       | Number              |
+| Crm Cd          | Indicates the crime committed. (Same as Crime Code 1)                                                                                                                                  | crm_cd         | Text                |
+| Crm Cd Desc     | Defines the Crime Code provided.                                                                                                                                                        | crm_cd_desc    | Text                |
+| Mocodes         | Modus Operandi: Activities associated with the suspect in commission of the crime. See attached PDF for list of MO Codes in numerical order.                                            | mocodes        | Text                |
+| Vict Age        | Two character numeric                                                                                                                                                                   | vict_age       | Text                |
+| Vict Sex        | F - Female, M - Male, X - Unknown                                                                                                                                                       | vict_sex       | Text                |
+| Vict Descent    | Descent Code: A - Other Asian, B - Black, C - Chinese, D - Cambodian, F - Filipino, G - Guamanian, H - Hispanic/Latin/Mexican, I - American Indian/Alaskan Native, etc.                  | vict_descent   | Text                |
+| Premis Cd       | The type of structure, vehicle, or location where the crime took place.                                                                                                                 | premis_cd      | Number              |
+| Premis Desc     | Defines the Premise Code provided.                                                                                                                                                      | premis_desc    | Text                |
+| Weapon Used Cd  | The type of weapon used in the crime.                                                                                                                                                   | weapon_used_cd | Text                |
+| Weapon Desc     | Defines the Weapon Used Code provided.                                                                                                                                                  | weapon_desc    | Text                |
+| Status          | Status of the case. (IC is the default)                                                                                                                                                 | status         | Text                |
+| Status Desc     | Defines the Status Code provided.                                                                                                                                                       | status_desc    | Text                |
+| Crm Cd 1        | Indicates the crime committed. Crime Code 1 is the primary and most serious one.                                                                                                        | crm_cd_1       | Text                |
+| Crm Cd 2        | May contain a code for an additional crime, less serious than Crime Code 1.                                                                                                             | crm_cd_2       | Text                |
+| Crm Cd 3        | May contain a code for an additional crime, less serious than Crime Code 1.                                                                                                             | crm_cd_3       | Text                |
+| Crm Cd 4        | May contain a code for an additional crime, less serious than Crime Code 1.                                                                                                             | crm_cd_4       | Text                |
+| LOCATION        | Street address of crime incident rounded to the nearest hundred block to maintain anonymity.                                                                                            | location       | Text                |
+| Cross Street    | Cross Street of rounded Address                                                                                                                                                         | cross_street   | Text                |
+| LAT             | Latitude                                                                                                                                                                                | lat            | Number              |
+| LON             | Longitude                                                                                                                                                                               | lon            | Number              |
+
+
+
+
+
 #### 1. **Data Analysis for Awareness**
 
 -   **Objectives**: Identify and understand the most common crime types and the neighborhoods most impacted. Analyze demographic factors to tailor the campaign for specific areas.
@@ -90,31 +134,31 @@ colnames(crime_data)
 
     -   A heatmap for spatial distribution of crime.
 
-    -   A time series chart for crime types by month or year.
+    -   A time series chart for crime types by year(s).
 
-**Question 2: How can community engagement influence safety awareness and crime reduction?**
+**Question 2: What is the distribution of victim ages, sexes, and descents across different crime types in the LAPD crime data?**
 
--   **Variables**: Crime incidence pre- and post-campaign, community engagement metrics.
+-   **Variables**: Vict Age, Vict Sex, Vict Descent, crm_cd_desc
 
 -   **Plan**:
 
-    -   Survey community members on campaign awareness and perceived safety improvements.
+    -   Basis the top Crime types the bifurcation of visual for victims age, sex and descent
 
-    -   Compare crime rates in high-risk areas before and after campaign rollout.
+    -   Clean and preprocess crime data, focusing on crime type, sex, age and descent
 
 -   **Visualizations**:
 
-    -   Bar chart comparing reported crimes in key areas pre- and post-campaign.
+    -   Parallel Coordinate Plot: Use a parallel coordinate plot to visualize the relationships among victim age, sex, descent, and crime type.
 
-    -   Survey response visualizations to show campaign reach and impact.
+    -   Bubble Chart for Victim Age and Crime Type: Use a bubble chart where the size of the bubble represents the frequency of crimes for a specific combination of victim age (vict_age) and crime type (crm_cd_desc).
 
 ### Analysis Plan
 
 | Task | Status | Assignee | Due Date | Priority | Summary |
 |------------|------------|------------|------------|------------|-------------|
-| **Data Collection and Cleaning** | Not Started |  | Week 1 | High | Collect and clean LAPD data for analysis. |
-| **Crime Trends Analysis** | Not Started |  | Week 1 | High | Identify common crime types and locations. |
-| **Campaign Material Design** | Not Started |  | Week 2 | High | Develop digital and print materials. |
+| **Data Collection and Cleaning** |  Completed  |  | Week 1 | High | Collect and clean LAPD data for analysis. |
+| **Crime Trends Analysis** | Completed |  | Week 1 | High | Identify common crime types and locations. |
+| **Campaign Material Design** | In Progress |  | Week 2 | High | Develop digital and print materials. |
 | **Community Workshop Planning** | Not Started |  | Week 3 | Medium | Plan virtual and in-person sessions. |
 | **Feedback Mechanism Setup** | Not Started |  | Week 3 | Medium | Create channels for collecting feedback. |
 | **Campaign Rollout** | Not Started |  | Week 4 | High | Launch awareness campaign in target areas. |
