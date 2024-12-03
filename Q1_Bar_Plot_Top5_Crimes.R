@@ -28,21 +28,30 @@ filtered_data <- csv_data %>%
 # Step 4: Identify top 5 crimes in "Crm Cd Desc"
 top_crimes <- filtered_data %>%
   count(Crm.Cd.Desc, sort = TRUE) %>%
-  top_n(5, n) 
+  top_n(5, n)
 
-# Step 5: Create a bar plot for the top 5 crimes
-ggplot(top_crimes, aes(x = reorder(Crm.Cd.Desc, n), y = n, fill = Crm.Cd.Desc)) +
-  geom_bar(stat = "identity") +
+# Step 5: Create a bar plot for the top 5 crimes with scaled axes
+ggplot(top_crimes, aes(x = reorder(Crm.Cd.Desc, n), y = n)) +
+  geom_bar(stat = "identity", fill = "#4E79A7", color = "black", width = 0.4) + # Width set to 0.4
+  geom_text(aes(label = n), 
+            hjust = -0.3, 
+            size = 5, 
+            color = "white",
+            fontface = "bold") +
   coord_flip() + # Flip coordinates to make horizontal bars
-  scale_fill_viridis_d(name = "Crime Type") +
+  #scale_x_continuous(expand = expansion(mult = c(0, 0.1))) + # Adjust numerical x-axis (after flip)
+  scale_y_discrete(expand = expansion(mult = c(0.01, 0.01))) + # Adjust categorical y-axis (crime types)
   labs(
     title = "Top 5 Crimes in Los Angeles",
-    x = "Crime Type",
-    y = "Number of Incidents"
+    x = "Number of Incidents",
+    y = "Crime Type"
   ) +
   theme_minimal() +
   theme(
     legend.position = "none",        # Hide legend for this plot
     plot.title = element_text(size = 14, face = "bold"),
-    axis.title = element_text(size = 12)
+    axis.title = element_text(size = 12),
+    axis.text.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 5)), # Adjust spacing between text and bars
+    plot.title.position = "plot"
   )
+

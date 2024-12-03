@@ -1,16 +1,11 @@
-##################################################################################################################################
-
-###########   Question 1: What are the most common types of crimes and high-risk areas in Los Angeles?  ##########################
-
-##################################################################################################################################
-# Load necessary libraries
 # Load necessary libraries
 library(sf)
 library(tigris)
 library(ggplot2)
 library(dplyr)
-library(stringr)
-library(readr)
+library(stringr) # For string manipulation
+library(readr) # For reading CSV files
+library(tmap)
 
 # Set options for tigris
 options(tigris_class = "sf", tigris_use_cache = TRUE)
@@ -51,10 +46,10 @@ points_sf <- st_as_sf(filtered_top_crimes, coords = c("LON", "LAT"), crs = 4326)
 # Step 8: Transform coordinate system to match Los Angeles shapefile
 points_sf <- st_transform(points_sf, st_crs(la_shapefile))
 
-# Step 9: Plot the map with points categorized by crime
+# Step 9: Plot the map with points categorized by crime and legend adjustments
 ggplot() +
   geom_sf(data = la_shapefile, fill = "lightblue", color = "darkblue", linewidth = 0.5) +
-  geom_sf(data = points_sf, aes(color = Crm.Cd.Desc), size = 2, alpha = 0.8) +
+  geom_sf(data = points_sf, aes(color = Crm.Cd.Desc), size = 0.1, alpha = 1) +
   scale_color_viridis_d(name = "Crime Type") +
   ggtitle("Map of Los Angeles with Top 5 Crimes") +
   theme_minimal() +
@@ -63,4 +58,27 @@ ggplot() +
     legend.title = element_text(size = 10), # Customize legend title size
     legend.text = element_text(size = 9),   # Customize legend text size
     legend.box = "horizontal"         # Arrange legend horizontally
+  )
+
+tmap_mode("view")
+
+# Base map with tm_shape and tm_fill
+tm_shape(la_shapefile) +
+  tm_fill(col = "lightblue", border.col = "darkblue", border.lwd = 0.5) + # Fill and border for shapefile
+  tm_shape(points_sf) +
+  tm_dots(
+    col = "Crm.Cd.Desc", 
+    palette = "viridis", 
+    size = 0.001, 
+    alpha = 1,
+    title = "Crime Type" # Legend title
+  ) +
+  tm_layout(
+    title = "Map of Los Angeles with Top 5 Crimes",
+    legend.outside = FALSE,            # Keep legend inside the map
+    legend.position = c("bottom"),     # Place legend at the bottom
+    legend.text.size = 0.9,            # Adjust legend text size
+    legend.title.size = 1.0,           # Adjust legend title size
+    legend.bg.color = "white",         # Background color for legend
+    legend.bg.alpha = 0.8              # Slight transparency for legend background
   )
