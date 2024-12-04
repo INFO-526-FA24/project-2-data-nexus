@@ -35,7 +35,7 @@ ggplot(area_summary, aes(
     size = 8      # Set a consistent font size
   ) +
   scale_colour_identity() +  # Use text color as specified in the data
-  scale_fill_gradient(low = "lightblue", high = "steelblue") +
+  scale_fill_gradient(low = "aliceblue", high = "steelblue") +
   labs(
     title = "Crimes by Area",
     fill = "Crime Count"
