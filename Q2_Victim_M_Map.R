@@ -48,8 +48,19 @@ points_sf <- st_transform(points_sf, st_crs(la_shapefile))
 # Step 9: Plot the map with points in red
 ggplot() +
   geom_sf(data = la_shapefile, fill = NA, color = "darkgrey", linewidth = 0.5) +
-  geom_sf(data = points_sf, color = "#619DFF", size = 0.1, alpha = 1) +
-  ggtitle("Map of Los Angeles with Top 5 Crimes") +
+  geom_sf(data = points_sf, color = "#F9766E", size = 0.1, alpha = 1) +  ##F9766E  619DFF
+  ggtitle("Map of Los Angeles with Female Victims") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",          # Remove legend for uniform color
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5) # Centered title
+  )
+
+# Step 9: Plot the map with points in red
+ggplot() +
+  geom_sf(data = la_shapefile, fill = NA, color = "darkgrey", linewidth = 0.5) +
+  geom_sf(data = points_sf, color = "#619DFF", size = 0.1, alpha = 1) +  ##F9766E  619DFF
+  ggtitle("Map of Los Angeles with Male Victims") +
   theme_minimal() +
   theme(
     legend.position = "none",          # Remove legend for uniform color
@@ -68,7 +79,7 @@ tm_shape(la_shapefile) +
     alpha = 1
   ) +
   tm_layout(
-    title = "Map of Los Angeles with Top 5 Crimes",
+    title = "Map of Los Angeles with Male Victims",
     legend.show = FALSE,                # Remove legend for uniform color
     title.size = 1.2,                   # Adjust title size
     title.position = c("center", "top") # Center title at the top
