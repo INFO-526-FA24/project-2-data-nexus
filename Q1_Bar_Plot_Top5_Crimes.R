@@ -32,7 +32,7 @@ top_crimes <- filtered_data %>%
 
 # Step 5: Create a bar plot for the top 5 crimes with scaled axes
 ggplot(top_crimes, aes(x = reorder(Crm.Cd.Desc, n), y = n)) +
-  geom_bar(stat = "identity", fill = "#4E79A7", color = "black", width = 0.4) + # Width set to 0.4
+  geom_bar(stat = "identity", fill = "#3A5B7D", color = "black", width = 0.4) + # Width set to 0.4
   geom_text(aes(label = n), 
             hjust = -0.3, 
             size = 5, 

@@ -12,9 +12,7 @@ race_mapping <- c(
   "H" = "Hispanic",
   "A" = "Asian",
   "O" = "Other",
-  "X" = "Unknown",
-  "I" = "American Indian/Alaska Native",
-  "P" = "Pacific Islander"
+  "X" = "Unknown"
 )
 
 # Filter for the specified race categories
@@ -32,7 +30,7 @@ crime_summary <- crime_data %>%
 
 # Create a horizontal bar graph
 ggplot(crime_summary, aes(x = Crime_Count, y = reorder(Vict_Descent, Crime_Count))) +
-  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_bar(stat = "identity", fill = "#3A5B7D") +
   scale_x_continuous(labels = scales::label_number(scale = 0.001, suffix = "K")) +
   labs(
     title = "Crime Counts by Race",
@@ -41,9 +39,9 @@ ggplot(crime_summary, aes(x = Crime_Count, y = reorder(Vict_Descent, Crime_Count
   ) +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(size = 12),  # Increase font size for x-axis labels
+    axis.text.x = element_text(size = 15),  # Increase font size for x-axis labels
     axis.title.x = element_text(size = 14), # Increase font size for x-axis title
     axis.title.y = element_text(size = 14), # Increase font size for y-axis title
     plot.title = element_text(size = 16, hjust = 0.5), # Center-align and enlarge title
-    axis.text.y = element_text(size = 12)
+    axis.text.y = element_text(size = 19)
   )

@@ -34,11 +34,12 @@ top_crimes <- filtered_data %>%
   mutate(Percentage = n / sum(n) * 100) # Calculate percentage of each crime
 
 # Step 5: Create an interactive bar plot for the top 5 crimes
+# Modify theme to increase the font size of x-axis labels
 plot <- ggplot(top_crimes, aes(x = reorder(Crm.Cd.Desc, n), y = n, 
                                text = paste("Crime Type:", Crm.Cd.Desc, 
                                             "<br>Incidents:", n, 
                                             "<br>Percentage:", sprintf("%.1f%%", Percentage)))) +
-  geom_bar(stat = "identity", fill = "#4E79A7", color = "black", width = 0.4) +
+  geom_bar(stat = "identity", fill = "#3A5B7D", color = "black", width = 0.4) +
   geom_text(aes(label = paste0(" ----------- (", sprintf("%.1f%%", Percentage), ")")), 
             hjust = 10, 
             size = 4, 
@@ -57,7 +58,9 @@ plot <- ggplot(top_crimes, aes(x = reorder(Crm.Cd.Desc, n), y = n,
     legend.position = "none",        # Hide legend for this plot
     plot.title = element_text(size = 14, face = "bold"),
     axis.title = element_text(size = 12),
-    axis.text.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 5)), # Adjust spacing between text and bars
+    #axis.text.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 5)), # Adjust spacing between text and bars
+    axis.text.y = element_text(size = 19), # Increase font size of y-axis labels
+    axis.text.x = element_text(size = 14), # Increase font size of x-axis labels
     plot.title.position = "plot"
   )
 
@@ -66,4 +69,3 @@ interactive_plot <- ggplotly(plot, tooltip = "text")
 
 # Print the interactive plot
 interactive_plot
-
