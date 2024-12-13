@@ -67,21 +67,21 @@ ggplot() +
     plot.title = element_text(size = 14, face = "bold", hjust = 0.5) # Centered title
   )
 
-tmap_mode("view")
-
-# Base map with tm_shape and tm_fill for tmap
-tm_shape(la_shapefile) +
-  tm_fill(col = NA, border.col = "darkgrey", border.lwd = 0.5) + # Fill and border for shapefile
-  tm_shape(points_sf) +
-  tm_dots(
-    col = "#619DFF",      # Set points color to red
-    size = 0.001, 
-    alpha = 1
-  ) +
-  tm_layout(
-    title = "Map of Los Angeles with Male Victims",
-    legend.show = FALSE,                # Remove legend for uniform color
-    title.size = 1.2,                   # Adjust title size
-    title.position = c("center", "top") # Center title at the top
-  )
+# tmap_mode("view")
+# 
+# # Base map with tm_shape and tm_fill for tmap
+# tm_shape(la_shapefile) +
+#   tm_fill(col = NA, border.col = "darkgrey", border.lwd = 0.5) + # Fill and border for shapefile
+#   tm_shape(points_sf) +
+#   tm_dots(
+#     col = "#619DFF",      # Set points color to red
+#     size = 0.001, 
+#     alpha = 1
+#   ) +
+#   tm_layout(
+#     title = "Map of Los Angeles with Male Victims",
+#     legend.show = FALSE,                # Remove legend for uniform color
+#     title.size = 1.2,                   # Adjust title size
+#     title.position = c("center", "top") # Center title at the top
+#   )
 
