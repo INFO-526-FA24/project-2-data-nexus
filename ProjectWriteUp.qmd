@@ -7,8 +7,6 @@ prefer-html: true
 output: html_document
 ---
 
-
-
 ## **Public Safety Awareness Campaign Based on Crime Data**
 
 ### **Overview**
@@ -63,7 +61,6 @@ This initiative will leverage crime data provided by the LAPD to dissect crime p
 options(repos = c(CRAN = "https://cran.rstudio.com/"))
 install.packages("sf")
 ```
-
 
 ```{r}
 #Code and Visualization for the total cases reported:
@@ -176,17 +173,18 @@ ggplot(crime_summary, aes(x = "", y = Total_Crimes, fill = factor(Year))) +
     install.packages("remotes")
     remotes::install_github('r-tmap/tmap')
     ```
-```{r}
-    install.packages("tigris", dependencies = TRUE)
-```
 
+    ```{r}
+        install.packages("tigris", dependencies = TRUE)
+    ```
 
 ```{r}
     install.packages("sf")
     install.packages("jsonify")
 ```
 
-    ```{r}
+```{r}
+
 #	The code and visualization for the Area with top 5 Crimes:
 #install.packages("remotes")
 #remotes::install_github('r-tmap/tmap')
@@ -217,9 +215,9 @@ csv_data <- do.call(rbind, lapply(csv_files, read.csv))
 # Step 3: Replace specific value in "Crm Cd Desc"
 csv_data <- csv_data %>%
   mutate(Crm.Cd.Desc = str_replace(
-    Crm.Cd.Desc, 
-    "VANDALISM - FELONY \\(\\$400 & OVER, ALL CHURCH VANDALISMS\\)", 
-    "VANDALISM - FELONY"
+Crm.Cd.Desc, 
+"VANDALISM - FELONY \\(\\$400 & OVER, ALL CHURCH VANDALISMS\\)", 
+"VANDALISM - FELONY"
   ))
 
 # Step 4: Filter out rows where LON and LAT are 0
@@ -250,172 +248,162 @@ ggplot() +
   ggtitle("Map of Los Angeles with Top 5 Crimes") +
   theme_minimal() +
   theme(
-    legend.position = "bottom",        # Move legend to the bottom
-    legend.title = element_text(size = 10), # Customize legend title size
-    legend.text = element_text(size = 9),   # Customize legend text size
-    legend.box = "vertical"         # Arrange legend
+legend.position = "bottom",        # Move legend to the bottom
+legend.title = element_text(size = 10), # Customize legend title size
+legend.text = element_text(size = 9),   # Customize legend text size
+legend.box = "vertical"         # Arrange legend
   )
 
 tmap_mode("view")
 
 tm_shape(la_shapefile) +
   tm_fill(
-    fill = "lightblue",    # Fill color for the shapefile
-    col = "darkblue",      # Border color for the shapefile
-    lwd = 0.5              # Border line width
+fill = "lightblue",    # Fill color for the shapefile
+col = "darkblue",      # Border color for the shapefile
+lwd = 0.5              # Border line width
   ) +
   tm_shape(points_sf) +
   tm_dots(
-    fill = "Crm.Cd.Desc",                      # Variable for fill color
-    fill.scale = tm_scale(values = "viridis"), # Use tm_scale for palette
-    size = 0.001,                              # Dot size
-    fill_alpha = 1,                            # Transparency
-    title = "Crime Type"                       # Legend title
+fill = "Crm.Cd.Desc",                      # Variable for fill color
+fill.scale = tm_scale(values = "viridis"), # Use tm_scale for palette
+size = 0.001,                              # Dot size
+fill_alpha = 1,                            # Transparency
+title = "Crime Type"                       # Legend title
   ) +
   tm_title("Map of Los Angeles with Top 5 Crimes") + # Title
   tm_layout(
-    legend.outside = FALSE,                 # Keep legend inside the map
-    legend.position = c("right", "top"),    # Correct legend position
-    legend.text.size = 0.9,                 # Legend text size
-    legend.title.size = 1.0,                # Legend title size
-    legend.bg.color = "white",              # Legend background color
-    legend.bg.alpha = 0.8                   # Legend background transparency
+legend.outside = FALSE,                 # Keep legend inside the map
+legend.position = c("right", "top"),    # Correct legend position
+legend.text.size = 0.9,                 # Legend text size
+legend.title.size = 1.0,                # Legend title size
+legend.bg.color = "white",              # Legend background color
+legend.bg.alpha = 0.8                   # Legend background transparency
+  )
+```
+
+```{r}
+#Code and Visualization for the areas in a TreeMap to define the count, #percentage and color density of Crime:
+
+remove.packages("ggfittext")
+remove.packages("treemapify")
+install.packages("ggfittext")
+install.packages("treemapify")
+
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(treemapify)
+
+# Read the dataset
+csv_files <- list.files(path = "data/", pattern = "*.csv", full.names = TRUE)
+crime_data <- do.call(rbind, lapply(csv_files, read.csv))
+
+# Summarize crimes by area and sort in descending order
+area_summary <- crime_data %>%
+  group_by(AREA.NAME) %>%
+  summarize(Crime_Count = n(), .groups = "drop") %>%
+  mutate(Percentage = Crime_Count / sum(Crime_Count) * 100) %>%
+  arrange(desc(Crime_Count))
+
+# Create a treemap with sorted data and conditional text color
+ggplot(area_summary, aes(
+  area = Crime_Count,
+  fill = Crime_Count,
+  label = paste0(AREA.NAME, "\n", Crime_Count, "\n", "(", round(Percentage, 1), "%)")
+)) +
+  geom_treemap(color = "white") +  # Set line color to white
+  geom_treemap_text(
+    aes(colour = "darkslateblue"),
+    fontface = "bold",
+    place = "centre",
+    grow = FALSE,  # Disable font resizing
+    size = 8      # Set a consistent font size
+  ) +
+  scale_colour_identity() +  # Use text color as specified in the data
+  scale_fill_gradient(low = "aliceblue", high = "steelblue") +
+  labs(
+    title = "Crimes by Area",
+    fill = "Crime Count"
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+#Code and Visualization of top 5 Crimes:
+
+# Load necessary libraries
+library(sf)
+library(tigris)
+library(ggplot2)
+library(dplyr)
+library(stringr) # For string manipulation
+library(readr) # For reading CSV files
+library(plotly) # For interactive plots
+library(scales) # For number formatting
+
+# Set options for tigris
+options(tigris_class = "sf", tigris_use_cache = TRUE)
+
+# Step 1: Read and combine all CSV files into one data frame
+csv_files <- list.files(path = "data/", pattern = "*.csv", full.names = TRUE)
+csv_data <- do.call(rbind, lapply(csv_files, read.csv))
+
+# Step 2: Replace specific value in "Crm Cd Desc"
+csv_data <- csv_data %>%
+  mutate(Crm.Cd.Desc = str_replace(
+    Crm.Cd.Desc, 
+    "VANDALISM - FELONY \\(\\$400 & OVER, ALL CHURCH VANDALISMS\\)", 
+    "VANDALISM - FELONY"
+  ))
+
+# Step 3: Filter out rows where LON and LAT are 0
+filtered_data <- csv_data %>%
+  filter(LON != 0, LAT != 0)
+
+# Step 4: Identify top 5 crimes in "Crm Cd Desc"
+top_crimes <- filtered_data %>%
+  count(Crm.Cd.Desc, sort = TRUE) %>%
+  top_n(5, n) %>%
+  mutate(Percentage = n / sum(n) * 100) # Calculate percentage of each crime
+
+# Step 5: Create an interactive bar plot for the top 5 crimes
+# Modify theme to increase the font size of x-axis labels
+plot <- ggplot(top_crimes, aes(x = reorder(Crm.Cd.Desc, n), y = n, 
+                               text = paste("Crime Type:", Crm.Cd.Desc, 
+                                            "<br>Incidents:", n, 
+                                            "<br>Percentage:", sprintf("%.1f%%", Percentage)))) +
+  geom_bar(stat = "identity", fill = "#3A5B7D", color = "black", width = 0.4) +
+  geom_text(aes(label = paste0(" ----------- (", sprintf("%.1f%%", Percentage), ")")), 
+            hjust = 10, 
+            size = 4, 
+            color = "black",
+            fontface = "bold") +
+  coord_flip() + # Flip coordinates to make horizontal bars
+  scale_y_continuous(labels = label_number(scale_cut = cut_short_scale()), 
+                     expand = expansion(mult = c(0.05, 0.1))) + # Format numbers and adjust padding
+  labs(
+    title = "Top 5 Crimes in Los Angeles",
+    x = "Crime Type",
+    y = "Number of Incidents"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",        # Hide legend for this plot
+    plot.title = element_text(size = 14, face = "bold"),
+    axis.title = element_text(size = 12),
+    #axis.text.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 5)), # Adjust spacing between text and bars
+    axis.text.y = element_text(size = 19), # Increase font size of y-axis labels
+    axis.text.x = element_text(size = 14), # Increase font size of x-axis labels
+    plot.title.position = "plot"
   )
 
-    ```
+# Convert ggplot to an interactive plotly plot
+interactive_plot <- ggplotly(plot, tooltip = "text")
 
-    ```{r}
-    #remove.packages("ggfittext")
-    #remove.packages("treemapify")
-    #install.packages("ggfittext")
-    #install.packages("treemapify")
-    ```
-
-    ```{r}
-    #Code and Visualization for the areas in a TreeMap to define the count, #percentage and color density of Crime:
-    
-    remove.packages("ggfittext")
-    remove.packages("treemapify")
-    install.packages("ggfittext")
-    install.packages("treemapify")
-    
-    # Load necessary libraries
-    library(ggplot2)
-    library(dplyr)
-    library(treemapify)
-
-    # Read the dataset
-    csv_files <- list.files(path = "data/", pattern = "*.csv", full.names = TRUE)
-    crime_data <- do.call(rbind, lapply(csv_files, read.csv))
-
-    # Summarize crimes by area and sort in descending order
-    area_summary <- crime_data %>%
-      group_by(AREA.NAME) %>%
-      summarize(Crime_Count = n(), .groups = "drop") %>%
-      mutate(Percentage = Crime_Count / sum(Crime_Count) * 100) %>%
-      arrange(desc(Crime_Count))
-
-    # Create a treemap with sorted data and conditional text color
-    ggplot(area_summary, aes(
-      area = Crime_Count,
-      fill = Crime_Count,
-      label = paste0(AREA.NAME, "\n", Crime_Count, "\n", "(", round(Percentage, 1), "%)")
-    )) +
-      geom_treemap(color = "white") +  # Set line color to white
-      geom_treemap_text(
-        aes(colour = "darkslateblue"),
-        fontface = "bold",
-        place = "centre",
-        grow = FALSE,  # Disable font resizing
-        size = 8      # Set a consistent font size
-      ) +
-      scale_colour_identity() +  # Use text color as specified in the data
-      scale_fill_gradient(low = "aliceblue", high = "steelblue") +
-      labs(
-        title = "Crimes by Area",
-        fill = "Crime Count"
-      ) +
-      theme_minimal()
-
-
-    ```
-
-    ```{r}
-    #Code and Visualization of top 5 Crimes:
-
-    # Load necessary libraries
-    library(sf)
-    library(tigris)
-    library(ggplot2)
-    library(dplyr)
-    library(stringr) # For string manipulation
-    library(readr) # For reading CSV files
-    library(plotly) # For interactive plots
-    library(scales) # For number formatting
-
-    # Set options for tigris
-    options(tigris_class = "sf", tigris_use_cache = TRUE)
-
-    # Step 1: Read and combine all CSV files into one data frame
-    csv_files <- list.files(path = "data/", pattern = "*.csv", full.names = TRUE)
-    csv_data <- do.call(rbind, lapply(csv_files, read.csv))
-
-    # Step 2: Replace specific value in "Crm Cd Desc"
-    csv_data <- csv_data %>%
-      mutate(Crm.Cd.Desc = str_replace(
-        Crm.Cd.Desc, 
-        "VANDALISM - FELONY \\(\\$400 & OVER, ALL CHURCH VANDALISMS\\)", 
-        "VANDALISM - FELONY"
-      ))
-
-    # Step 3: Filter out rows where LON and LAT are 0
-    filtered_data <- csv_data %>%
-      filter(LON != 0, LAT != 0)
-
-    # Step 4: Identify top 5 crimes in "Crm Cd Desc"
-    top_crimes <- filtered_data %>%
-      count(Crm.Cd.Desc, sort = TRUE) %>%
-      top_n(5, n) %>%
-      mutate(Percentage = n / sum(n) * 100) # Calculate percentage of each crime
-
-    # Step 5: Create an interactive bar plot for the top 5 crimes
-    # Modify theme to increase the font size of x-axis labels
-    plot <- ggplot(top_crimes, aes(x = reorder(Crm.Cd.Desc, n), y = n, 
-                                   text = paste("Crime Type:", Crm.Cd.Desc, 
-                                                "<br>Incidents:", n, 
-                                                "<br>Percentage:", sprintf("%.1f%%", Percentage)))) +
-      geom_bar(stat = "identity", fill = "#3A5B7D", color = "black", width = 0.4) +
-      geom_text(aes(label = paste0(" ----------- (", sprintf("%.1f%%", Percentage), ")")), 
-                hjust = 10, 
-                size = 4, 
-                color = "black",
-                fontface = "bold") +
-      coord_flip() + # Flip coordinates to make horizontal bars
-      scale_y_continuous(labels = label_number(scale_cut = cut_short_scale()), 
-                         expand = expansion(mult = c(0.05, 0.1))) + # Format numbers and adjust padding
-      labs(
-        title = "Top 5 Crimes in Los Angeles",
-        x = "Crime Type",
-        y = "Number of Incidents"
-      ) +
-      theme_minimal() +
-      theme(
-        legend.position = "none",        # Hide legend for this plot
-        plot.title = element_text(size = 14, face = "bold"),
-        axis.title = element_text(size = 12),
-        #axis.text.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 5)), # Adjust spacing between text and bars
-        axis.text.y = element_text(size = 19), # Increase font size of y-axis labels
-        axis.text.x = element_text(size = 14), # Increase font size of x-axis labels
-        plot.title.position = "plot"
-      )
-
-    # Convert ggplot to an interactive plotly plot
-    interactive_plot <- ggplotly(plot, tooltip = "text")
-
-    # Print the interactive plot
-    interactive_plot
-
-    ```
+# Print the interactive plot
+interactive_plot
+```
 
 2.  **How do victim demographics vary across different crime types?**
 
