@@ -1,3 +1,8 @@
+install.packages("remotes")
+remotes::install_github('r-tmap/tmap')
+install.packages("sf")
+install.packages("tigris", dependencies = TRUE)
+
 # Load necessary libraries
 library(sf)
 library(tigris)

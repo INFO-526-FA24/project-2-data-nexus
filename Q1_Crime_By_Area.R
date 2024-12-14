@@ -1,4 +1,5 @@
-#install.packages("treemapify")
+install.packages("treemapify")
+install.packages("ggfittext")
 
 # Load necessary libraries
 library(ggplot2)
@@ -15,10 +16,6 @@ area_summary <- crime_data %>%
   summarize(Crime_Count = n(), .groups = "drop") %>%
   mutate(Percentage = Crime_Count / sum(Crime_Count) * 100) %>%
   arrange(desc(Crime_Count))
-
-# Determine text color based on Crime_Count (higher values: white, lower values: black)
-#area_summary <- area_summary %>%
-#  mutate(Text_Color = ifelse(Crime_Count > median(Crime_Count), "white", "black"))
 
 # Create a treemap with sorted data and conditional text color
 ggplot(area_summary, aes(
