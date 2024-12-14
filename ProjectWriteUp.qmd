@@ -182,96 +182,105 @@ ggplot(crime_summary, aes(x = "", y = Total_Crimes, fill = factor(Year))) +
 
 
 ```{r}
-    #install.packages("sf")
+    install.packages("sf")
     install.packages("jsonify")
 ```
 
     ```{r}
-    #	The code and visualization for the Area with top 5 Crimes:
-    # Load necessary libraries
-    library(sf)
-    library(tigris)
-    library(ggplot2)
-    library(dplyr)
-    library(stringr) # For string manipulation
-    library(readr) # For reading CSV files
-    library(tmap)
+#	The code and visualization for the Area with top 5 Crimes:
+#install.packages("remotes")
+#remotes::install_github('r-tmap/tmap')
+#install.packages("sf")
+#install.packages("tigris", dependencies = TRUE)
+#install.packages("jsonify", dependencies = TRUE)
 
-    # Set options for tigris
-    options(tigris_class = "sf", tigris_use_cache = TRUE)
+# Load necessary libraries
+library(sf)
+library(tigris)
+library(ggplot2)
+library(dplyr)
+library(stringr) # For string manipulation
+library(readr) # For reading CSV files
+library(tmap)
 
-    # Step 1: Fetch Los Angeles city shapefile
-    la_shapefile <- places(state = "CA", cb = TRUE) %>%
-      filter(NAME == "Los Angeles")
+# Set options for tigris
+options(tigris_class = "sf", tigris_use_cache = TRUE)
 
-    # Step 2: Read and combine all CSV files into one data frame
-    csv_files <- list.files(path = "data/", pattern = "*.csv", full.names = TRUE)
-    csv_data <- do.call(rbind, lapply(csv_files, read.csv))
+# Step 1: Fetch Los Angeles city shapefile
+la_shapefile <- places(state = "CA", cb = TRUE) %>%
+  filter(NAME == "Los Angeles")
 
-    # Step 3: Replace specific value in "Crm Cd Desc"
-    csv_data <- csv_data %>%
-      mutate(Crm.Cd.Desc = str_replace(
-        Crm.Cd.Desc, 
-        "VANDALISM - FELONY \\(\\$400 & OVER, ALL CHURCH VANDALISMS\\)", 
-        "VANDALISM - FELONY"
-      ))
+# Step 2: Read and combine all CSV files into one data frame
+csv_files <- list.files(path = "data/", pattern = "*.csv", full.names = TRUE)
+csv_data <- do.call(rbind, lapply(csv_files, read.csv))
 
-    # Step 4: Filter out rows where LON and LAT are 0
-    filtered_data <- csv_data %>%
-      filter(LON != 0, LAT != 0)
+# Step 3: Replace specific value in "Crm Cd Desc"
+csv_data <- csv_data %>%
+  mutate(Crm.Cd.Desc = str_replace(
+    Crm.Cd.Desc, 
+    "VANDALISM - FELONY \\(\\$400 & OVER, ALL CHURCH VANDALISMS\\)", 
+    "VANDALISM - FELONY"
+  ))
 
-    # Step 5: Identify top 5 crimes in "Crm Cd Desc"
-    top_crimes <- filtered_data %>%
-      count(Crm.Cd.Desc, sort = TRUE) %>%
-      top_n(5, n) %>%
-      pull(Crm.Cd.Desc)
+# Step 4: Filter out rows where LON and LAT are 0
+filtered_data <- csv_data %>%
+  filter(LON != 0, LAT != 0)
 
-    # Step 6: Filter data for only the top 5 crimes
-    filtered_top_crimes <- filtered_data %>%
-      filter(Crm.Cd.Desc %in% top_crimes)
+# Step 5: Identify top 5 crimes in "Crm Cd Desc"
+top_crimes <- filtered_data %>%
+  count(Crm.Cd.Desc, sort = TRUE) %>%
+  top_n(5, n) %>%
+  pull(Crm.Cd.Desc)
 
-    # Step 7: Convert filtered data to an sf object
-    points_sf <- st_as_sf(filtered_top_crimes, coords = c("LON", "LAT"), crs = 4326)
+# Step 6: Filter data for only the top 5 crimes
+filtered_top_crimes <- filtered_data %>%
+  filter(Crm.Cd.Desc %in% top_crimes)
 
-    # Step 8: Transform coordinate system to match Los Angeles shapefile
-    points_sf <- st_transform(points_sf, st_crs(la_shapefile))
+# Step 7: Convert filtered data to an sf object
+points_sf <- st_as_sf(filtered_top_crimes, coords = c("LON", "LAT"), crs = 4326)
 
-    # Step 9: Plot the map with points categorized by crime and legend adjustments
-    ggplot() +
-      geom_sf(data = la_shapefile, fill = "lightblue", color = "darkblue", linewidth = 0.5) +
-      geom_sf(data = points_sf, aes(color = Crm.Cd.Desc), size = 0.1, alpha = 1) +
-      scale_color_viridis_d(name = "Crime Type") +
-      ggtitle("Map of Los Angeles with Top 5 Crimes") +
-      theme_minimal() +
-      theme(
-        legend.position = "bottom",        # Move legend to the bottom
-        legend.title = element_text(size = 10), # Customize legend title size
-        legend.text = element_text(size = 9),   # Customize legend text size
-        legend.box = "horizontal"         # Arrange legend horizontally
-      )
+# Step 8: Transform coordinate system to match Los Angeles shapefile
+points_sf <- st_transform(points_sf, st_crs(la_shapefile))
 
-     tmap_mode("view")
-     
-     # Base map with tm_shape and tm_fill
-#     tm_shape(la_shapefile) +
-#       tm_fill(col = "lightblue", border.col = "darkblue", border.lwd = 0.5) + # ill and border for shapefile
-#       tm_shape(points_sf) +
-#       tm_dots(
-#         col = "Crm.Cd.Desc", 
-#         palette = "viridis", 
-#         size = 0.001, 
-#         alpha = 1,
-#         title = "Crime Type" # Legend title
-#       ) +
-#       tm_layout(
-#         title = "Map of Los Angeles with Top 5 Crimes",
-#         legend.outside = FALSE,            # Keep legend inside the map
-#         legend.position = c("topright"),     # Place legend at the bottom
-#         legend.text.size = 0.9,            # Adjust legend text size
-#         legend.title.size = 1.0,           # Adjust legend title size
-#         legend.bg.color = "white",         # Background color for legend
-#         legend.bg.alpha = 0.8              # Slight transparency for legend background
-#    )
+# Step 9: Plot the map with points categorized by crime and legend adjustments
+ggplot() +
+  geom_sf(data = la_shapefile, fill = "lightblue", color = "darkblue", linewidth = 0.5) +
+  geom_sf(data = points_sf, aes(color = Crm.Cd.Desc), size = 0.1, alpha = 1) +
+  scale_color_viridis_d(name = "Crime Type") +
+  ggtitle("Map of Los Angeles with Top 5 Crimes") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",        # Move legend to the bottom
+    legend.title = element_text(size = 10), # Customize legend title size
+    legend.text = element_text(size = 9),   # Customize legend text size
+    legend.box = "vertical"         # Arrange legend
+  )
+
+tmap_mode("view")
+
+tm_shape(la_shapefile) +
+  tm_fill(
+    fill = "lightblue",    # Fill color for the shapefile
+    col = "darkblue",      # Border color for the shapefile
+    lwd = 0.5              # Border line width
+  ) +
+  tm_shape(points_sf) +
+  tm_dots(
+    fill = "Crm.Cd.Desc",                      # Variable for fill color
+    fill.scale = tm_scale(values = "viridis"), # Use tm_scale for palette
+    size = 0.001,                              # Dot size
+    fill_alpha = 1,                            # Transparency
+    title = "Crime Type"                       # Legend title
+  ) +
+  tm_title("Map of Los Angeles with Top 5 Crimes") + # Title
+  tm_layout(
+    legend.outside = FALSE,                 # Keep legend inside the map
+    legend.position = c("right", "top"),    # Correct legend position
+    legend.text.size = 0.9,                 # Legend text size
+    legend.title.size = 1.0,                # Legend title size
+    legend.bg.color = "white",              # Legend background color
+    legend.bg.alpha = 0.8                   # Legend background transparency
+  )
 
     ```
 
