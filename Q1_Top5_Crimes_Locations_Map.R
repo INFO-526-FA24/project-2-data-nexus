@@ -1,7 +1,7 @@
-install.packages("remotes")
-remotes::install_github('r-tmap/tmap')
-install.packages("sf")
-install.packages("tigris", dependencies = TRUE)
+#install.packages("remotes")
+#remotes::install_github('r-tmap/tmap')
+#install.packages("sf")
+#install.packages("tigris", dependencies = TRUE)
 
 # Load necessary libraries
 library(sf)
@@ -67,23 +67,48 @@ ggplot() +
 
 tmap_mode("view")
 
-# Base map with tm_shape and tm_fill
 tm_shape(la_shapefile) +
-  tm_fill(col = "lightblue", border.col = "darkblue", border.lwd = 0.5) + # Fill and border for shapefile
+  tm_fill(
+    fill = "lightblue",    # Fill color for the shapefile
+    col = "darkblue",      # Border color for the shapefile
+    lwd = 0.5              # Border line width
+  ) +
   tm_shape(points_sf) +
   tm_dots(
-    col = "Crm.Cd.Desc", 
-    palette = "viridis", 
-    size = 0.001, 
-    alpha = 1,
-    title = "Crime Type" # Legend title
+    fill = "Crm.Cd.Desc",  # Fill color based on "Crm.Cd.Desc"
+    palette = "viridis",   # Palette for the colors
+    size = 0.001,          # Dot size
+    fill_alpha = 1,        # Adjust transparency
+    title = "Crime Type"   # Legend title
   ) +
+  tm_title("Map of Los Angeles with Top 5 Crimes") + # Title
   tm_layout(
-    title = "Map of Los Angeles with Top 5 Crimes",
-    legend.outside = FALSE,            # Keep legend inside the map
-    legend.position = c("bottom"),     # Place legend at the bottom
-    legend.text.size = 0.9,            # Adjust legend text size
-    legend.title.size = 1.0,           # Adjust legend title size
-    legend.bg.color = "white",         # Background color for legend
-    legend.bg.alpha = 0.8              # Slight transparency for legend background
+    legend.outside = FALSE,          # Keep legend inside the map
+    legend.position = "topright",    # Legend position
+    legend.text.size = 0.9,          # Legend text size
+    legend.title.size = 1.0,         # Legend title size
+    legend.bg.color = "white",       # Legend background color
+    legend.bg.alpha = 0.8            # Legend background transparency
   )
+
+
+# Base map with tm_shape and tm_fill
+# tm_shape(la_shapefile) +
+#   tm_fill(col = "lightblue", border.col = "darkblue", border.lwd = 0.5) + # Fill and border for shapefile
+#   tm_shape(points_sf) +
+#   tm_dots(
+#     col = "Crm.Cd.Desc", 
+#     palette = "viridis", 
+#     size = 0.001, 
+#     alpha = 1,
+#     title = "Crime Type" # Legend title
+#   ) +
+#   tm_layout(
+#     title = "Map of Los Angeles with Top 5 Crimes",
+#     legend.outside = FALSE,            # Keep legend inside the map
+#     legend.position = c("topright"),     # Place legend at the bottom
+#     legend.text.size = 0.9,            # Adjust legend text size
+#     legend.title.size = 1.0,           # Adjust legend title size
+#     legend.bg.color = "white",         # Background color for legend
+#     legend.bg.alpha = 0.8              # Slight transparency for legend background
+#   )

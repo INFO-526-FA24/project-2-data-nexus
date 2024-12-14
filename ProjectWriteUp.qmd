@@ -183,6 +183,7 @@ ggplot(crime_summary, aes(x = "", y = Total_Crimes, fill = factor(Year))) +
 
 ```{r}
     #install.packages("sf")
+    install.packages("jsonify")
 ```
 
     ```{r}
@@ -252,25 +253,25 @@ ggplot(crime_summary, aes(x = "", y = Total_Crimes, fill = factor(Year))) +
      tmap_mode("view")
      
      # Base map with tm_shape and tm_fill
-     tm_shape(la_shapefile) +
-       tm_fill(col = "lightblue", border.col = "darkblue", border.lwd = 0.5) + # ill and border for shapefile
-       tm_shape(points_sf) +
-       tm_dots(
-         col = "Crm.Cd.Desc", 
-         palette = "viridis", 
-         size = 0.001, 
-         alpha = 1,
-         title = "Crime Type" # Legend title
-       ) +
-       tm_layout(
-         title = "Map of Los Angeles with Top 5 Crimes",
-         legend.outside = FALSE,            # Keep legend inside the map
-         legend.position = c("bottom"),     # Place legend at the bottom
-         legend.text.size = 0.9,            # Adjust legend text size
-         legend.title.size = 1.0,           # Adjust legend title size
-         legend.bg.color = "white",         # Background color for legend
-         legend.bg.alpha = 0.8              # Slight transparency for legend background
-    )
+#     tm_shape(la_shapefile) +
+#       tm_fill(col = "lightblue", border.col = "darkblue", border.lwd = 0.5) + # ill and border for shapefile
+#       tm_shape(points_sf) +
+#       tm_dots(
+#         col = "Crm.Cd.Desc", 
+#         palette = "viridis", 
+#         size = 0.001, 
+#         alpha = 1,
+#         title = "Crime Type" # Legend title
+#       ) +
+#       tm_layout(
+#         title = "Map of Los Angeles with Top 5 Crimes",
+#         legend.outside = FALSE,            # Keep legend inside the map
+#         legend.position = c("topright"),     # Place legend at the bottom
+#         legend.text.size = 0.9,            # Adjust legend text size
+#         legend.title.size = 1.0,           # Adjust legend title size
+#         legend.bg.color = "white",         # Background color for legend
+#         legend.bg.alpha = 0.8              # Slight transparency for legend background
+#    )
 
     ```
 
